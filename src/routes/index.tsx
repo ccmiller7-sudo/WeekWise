@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { fetchTransactions, fetchInsights, generateInsight, getSubscriptionStatus } from "~/lib/server-fns";
 import { useState, useEffect } from "react";
-import MarketingPage from "./marketing-page";
+import MarketingPage from "./-marketing-page";
 
 export const Route = createFileRoute("/")({
   component: Home,
