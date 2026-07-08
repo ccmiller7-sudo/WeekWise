@@ -1,0 +1,72 @@
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRoute,
+} from "@tanstack/react-router";
+import type { ReactNode } from "react";
+
+import appCss from "~/styles/app.css?url";
+
+export const Route = createRootRoute({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { title: "WeekWise" },
+      { name: "theme-color", content: "#4f46e5" },
+    ],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+    ],
+  }),
+  notFoundComponent: () => <div className="flex min-h-dvh items-center justify-center p-6 text-center text-gray-500">Page not found</div>,
+  component: RootComponent,
+});
+
+function RootComponent() {
+  return (
+    <RootDocument>
+      <Outlet />
+    </RootDocument>
+  );
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body className="pb-20">
+        {children}
+
+        {/* Bottom nav — mobile-first tab bar */}
+        <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/90 backdrop-blur-lg safe-area-bottom">
+          <div className="mx-auto flex max-w-lg items-center justify-around py-2">
+            <NavLink href="/" label="Home" icon="🏠" />
+            <NavLink href="/transactions" label="Spending" icon="💳" />
+            <NavLink href="/coach" label="Coach" icon="🎯" />
+            <NavLink href="/pricing" label="Pricing" icon="⭐" />
+            <NavLink href="/onboarding" label="Settings" icon="⚙️" />
+          </div>
+        </nav>
+
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+function NavLink({ href, label, icon }: { href: string; label: string; icon: string }) {
+  return (
+    <a
+      href={href}
+      className="flex flex-col items-center gap-0.5 px-3 py-1 text-xs font-medium text-gray-400 transition-colors hover:text-indigo-600 [&.active]:text-indigo-600"
+    >
+      <span className="text-lg">{icon}</span>
+      <span>{label}</span>
+    </a>
+  );
+}
