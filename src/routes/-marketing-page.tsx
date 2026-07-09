@@ -384,6 +384,7 @@ export default function MarketingPage({ navigate }: { navigate: (opts: { to: str
               <button onClick={() => scrollTo("features")} className="hover:text-indigo-600">Features</button>
               <button onClick={() => scrollTo("pricing")} className="hover:text-indigo-600">Pricing</button>
               <button onClick={() => scrollTo("faq")} className="hover:text-indigo-600">FAQ</button>
+              <button onClick={() => navigate({ to: "/blog" })} className="hover:text-indigo-600">Blog</button>
               <button onClick={() => navigate({ to: "/auth" })} className="hover:text-indigo-600">Sign In</button>
             </nav>
           </div>

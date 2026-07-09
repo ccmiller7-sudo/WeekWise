@@ -80,5 +80,14 @@ PLAID_ENV=sandbox
 
 **Without these:** The "Connect a bank account" option shows a "coming soon" message. Users can still import via CSV or add transactions manually.
 
-## OpenAI
-- `OPENAI_API_KEY` — for LLM categorization, insights, and coach features
+## Resend (Email)
+```
+RESEND_API_KEY=re_...
+```
+
+**How to get it:**
+1. Sign up at https://resend.com
+2. Go to API Keys and create a new key
+3. Add it as `RESEND_API_KEY` in `.env`
+
+**Without this:** The app cannot send any emails (welcome emails, weekly digests, trial reminders, etc.).
