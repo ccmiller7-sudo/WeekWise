@@ -182,14 +182,22 @@ export const signup = createServerFn({ method: "POST" }).handler(
     const subId = generateId();
     const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
     await createSubscription({
-      id: subId,
-      userId,
-      planType: "monthly",
-      status: "trialing",
-      trialEnd,
-    });
+              id: subId,
+              userId,
+              planType: "monthly",
+              status: "trialing",
+              trialEnd,
+            });
 
-    return { success: true, userId, email: data.email };
+            // Fire welcome email (non-blocking)
+            try {
+              const { sendWelcomeEmail } = await import("~/lib/email");
+              await sendWelcomeEmail(data.email, "");
+            } catch (e) {
+              console.error("Failed to send welcome email:", e);
+            }
+
+            return { success: true, userId, email: data.email };
   }
 );
 

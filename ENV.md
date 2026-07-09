@@ -2,6 +2,7 @@
 
 ## Required (already configured)
 - `DATABASE_URL` — Neon/PostgreSQL connection string
+- `RESEND_API_KEY` — Resend API key for transactional emails (welcome, weekly digest, trial reminders)
 
 ## Stripe Configuration
 
