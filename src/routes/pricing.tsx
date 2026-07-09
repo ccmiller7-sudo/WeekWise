@@ -18,6 +18,7 @@ const FEATURES = [
 function PricingPage() {
   const navigate = useNavigate();
   const [auth, setAuth] = useState<{ userId: string; email: string } | null>(null);
+  const [loading, setLoading] = useState<"monthly" | "annual" | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("weekwise_auth");
@@ -26,16 +27,28 @@ function PricingPage() {
     }
   }, []);
 
-  function handleChoose(planType: "monthly" | "annual") {
+  async function handleChoose(planType: "monthly" | "annual") {
     if (!auth) {
       navigate({ to: "/auth", search: { redirect: "/pricing" } });
       return;
     }
-    // Open Stripe checkout in a new tab so the user doesn't lose their session
-    const link = planType === "annual"
-      ? "https://buy.stripe.com/fZubJ1g6l9j418xbH09MY01"
-      : "https://buy.stripe.com/6oU9ATdYdbrc8AZ9yS9MY00";
-    window.open(link, "_blank", "noopener");
+    setLoading(planType);
+    try {
+      // Dynamic import to avoid client-side bundling issues
+      const { createCheckoutSession } = await import("~/lib/server-fns");
+      const result = await createCheckoutSession({ userId: auth.userId, planType });
+      if (result.url) {
+        window.location.href = result.url;
+      } else if (result.error) {
+        console.error("Checkout error:", result.error);
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      console.error("Checkout failed:", err);
+      alert("Failed to start checkout. Please try again.");
+    } finally {
+      setLoading(null);
+    }
   }
 
   return (
@@ -64,9 +77,10 @@ function PricingPage() {
           </ul>
           <button
             onClick={() => handleChoose("monthly")}
-            className="btn-primary w-full"
+            disabled={loading === "monthly"}
+            className="btn-primary w-full disabled:opacity-50"
           >
-            {auth ? "Subscribe Monthly" : "Start Free Trial"}
+            {loading === "monthly" ? "Redirecting..." : auth ? "Subscribe Monthly" : "Start Free Trial"}
           </button>
         </div>
 
@@ -92,9 +106,10 @@ function PricingPage() {
           </ul>
           <button
             onClick={() => handleChoose("annual")}
-            className="btn-primary w-full"
+            disabled={loading === "annual"}
+            className="btn-primary w-full disabled:opacity-50"
           >
-            {auth ? "Subscribe Annual" : "Start Free Trial"}
+            {loading === "annual" ? "Redirecting..." : auth ? "Subscribe Annual" : "Start Free Trial"}
           </button>
         </div>
       </div>
