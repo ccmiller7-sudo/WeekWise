@@ -11,6 +11,10 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1",
     "@neondatabase/serverless": "^1.1.0",
     "@stripe/stripe-js": "^9.9.0",
     "@tanstack/react-router": "^1.158.1",
@@ -20,7 +24,8 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-plaid-link": "^4.1.1",
-    "stripe": "^22.3.0"
+    "stripe": "^22.3.0",
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
