@@ -182,14 +182,22 @@ export const signup = createServerFn({ method: "POST" }).handler(
     const subId = generateId();
     const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
     await createSubscription({
-      id: subId,
-      userId,
-      planType: "monthly",
-      status: "trialing",
-      trialEnd,
-    });
+              id: subId,
+              userId,
+              planType: "monthly",
+              status: "trialing",
+              trialEnd,
+            });
 
-    return { success: true, userId, email: data.email };
+            // Fire welcome email (non-blocking)
+            try {
+              const { sendWelcomeEmail } = await import("~/lib/email");
+              await sendWelcomeEmail(data.email, "");
+            } catch (e) {
+              console.error("Failed to send welcome email:", e);
+            }
+
+            return { success: true, userId, email: data.email };
   }
 );
 
@@ -238,10 +246,57 @@ export const getSubscriptionStatus = createServerFn({ method: "GET" }).handler(
 
 export const createCheckoutSession = createServerFn({ method: "POST" }).handler(
   async (data: { userId: string; planType: string }) => {
-    const monthlyLink = "https://buy.stripe.com/6oU9ATdYdbrc8AZ9yS9MY00";
-    const annualLink = "https://buy.stripe.com/fZubJ1g6l9j418xbH09MY01";
-    const link = data.planType === "annual" ? annualLink : monthlyLink;
-    return { url: link };
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecretKey) {
+      return { error: "STRIPE_SECRET_KEY not configured." };
+    }
+
+    try {
+      const Stripe = (await import("stripe")).default;
+      const stripe = new Stripe(stripeSecretKey, { apiVersion: "2025-02-24.acacia" as any });
+
+      // Look up user email for pre-filling the checkout form
+      const { getAuthByUserId } = await import("~/lib/db");
+      const auth = await getAuthByUserId(data.userId);
+      const customerEmail = auth?.email || undefined;
+
+      const siteUrl = process.env.PUBLIC_SITE_URL || "https://6519b91b66901f3f0d85d0e9e833a163.ctonew.app";
+
+      const session = await stripe.checkout.sessions.create({
+        client_reference_id: data.userId,
+        customer_email: customerEmail,
+        mode: "subscription",
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: data.planType === "annual" ? "WeekWise Annual" : "WeekWise Monthly",
+                description: data.planType === "annual"
+                  ? "Annual subscription — save ~$16 vs monthly"
+                  : "Monthly subscription — 14-day free trial included",
+              },
+              unit_amount: data.planType === "annual" ? 7999 : 799, // $79.99 or $7.99 in cents
+              recurring: {
+                interval: data.planType === "annual" ? "year" : "month",
+              },
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          user_id: data.userId,
+          plan_type: data.planType,
+        },
+        success_url: `${siteUrl}/onboarding?checkout=success`,
+        cancel_url: `${siteUrl}/pricing?checkout=canceled`,
+      });
+
+      return { url: session.url };
+    } catch (err) {
+      console.error("Checkout session creation failed:", err);
+      return { error: "Failed to create checkout session." };
+    }
   }
 );
 
