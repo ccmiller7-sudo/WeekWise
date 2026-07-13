@@ -1,4 +1,4 @@
-# WeekWise — Production Environment Variables
+# WeekWise Finance — Production Environment Variables
 
 ## Required (already configured)
 - `DATABASE_URL` — Neon/PostgreSQL connection string

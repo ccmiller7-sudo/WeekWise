@@ -5,7 +5,7 @@ export const Route = createFileRoute("/blog")({
   component: BlogIndex,
   head: () => ({
     meta: [
-      { title: "WeekWise Blog — Personal Finance Insights" },
+      { title: "WeekWise Finance Blog — Personal Finance Insights" },
       { name: "description", content: "Practical personal finance insights for busy professionals. AI-powered budgeting tips, spending analysis, and money management advice." },
     ],
   }),
@@ -20,10 +20,10 @@ function BlogIndex() {
       {/* Header */}
       <div className="mb-8 text-center">
         <Link to="/" className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
-          ← Back to WeekWise
+          ← Back to WeekWise Finance
         </Link>
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          WeekWise Blog
+          WeekWise Finance Blog
         </h1>
         <p className="mt-2 text-gray-500">
           Practical personal finance insights for busy professionals

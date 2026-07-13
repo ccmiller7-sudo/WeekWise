@@ -283,7 +283,7 @@ function Onboarding() {
     return (
       <div className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center px-6 text-center">
         <span className="mb-4 text-5xl">👋</span>
-        <h1 className="mb-2 text-2xl font-bold">Welcome to WeekWise</h1>
+        <h1 className="mb-2 text-2xl font-bold">Welcome to WeekWise Finance</h1>
         <p className="mb-8 text-gray-500">
           Your money, explained in one minute a week. Let's set you up.
         </p>

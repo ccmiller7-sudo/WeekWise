@@ -46,7 +46,7 @@ async function sendViaResend(params: {
 
 // ── Email Templates ──────────────────────────────────────────────────────────
 
-const BRAND_NAME = "WeekWise";
+const BRAND_NAME = "WeekWise Finance";
 const BRAND_COLOR = "#4f46e5";
 const BASE_URL = process.env.PUBLIC_SITE_URL || "https://6519b91b66901f3f0d85d0e9e833a163.ctonew.app";
 
@@ -174,7 +174,7 @@ export function weeklyDigestHtml(params: {
         <td style="text-align:center;">
           <a href="${BASE_URL}"
              style="background:${BRAND_COLOR};color:#ffffff;padding:12px 32px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block;">
-            Open WeekWise →
+            Open WeekWise Finance →
           </a>
         </td>
       </tr>
@@ -223,7 +223,7 @@ export function trialReminderHtml(params: {
 
 // ── Send Functions ───────────────────────────────────────────────────────────
 
-const FROM_EMAIL = "WeekWise <onboarding@weekwise.app>";
+const FROM_EMAIL = "WeekWise Finance <onboarding@weekwise.app>";
 
 export async function sendWelcomeEmail(
   to: string,
@@ -232,7 +232,7 @@ export async function sendWelcomeEmail(
   return sendViaResend({
     from: FROM_EMAIL,
     to: [to],
-    subject: "Welcome to WeekWise! 👋",
+    subject: "Welcome to WeekWise Finance! 👋",
     html: welcomeEmailHtml(userName),
   });
 }
@@ -268,8 +268,8 @@ export async function sendTrialReminder(
   }
 ): Promise<{ success: boolean; id?: string; error?: string }> {
   const subject = params.daysLeft <= 3
-    ? "⏰ Final reminder: Your WeekWise trial ends soon"
-    : "⏳ Your WeekWise trial is ending soon";
+    ? "⏰ Final reminder: Your WeekWise Finance trial ends soon"
+    : "⏳ Your WeekWise Finance trial is ending soon";
 
   return sendViaResend({
     from: FROM_EMAIL,

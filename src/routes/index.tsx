@@ -73,7 +73,7 @@ function Dashboard() {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">WeekWise</h1>
+          <h1 className="text-2xl font-bold tracking-tight">WeekWise Finance</h1>
           <p className="text-sm text-gray-500">Your money, explained in one minute</p>
         </div>
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-600">

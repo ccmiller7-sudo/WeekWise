@@ -12,7 +12,7 @@ export default function MarketingPage({ navigate }: { navigate: (opts: { to: str
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="text-2xl">💰</span>
-            <span className="text-lg font-bold tracking-tight text-indigo-600">WeekWise</span>
+            <span className="text-lg font-bold tracking-tight text-indigo-600">WeekWise Finance</span>
           </div>
           <nav className="hidden items-center gap-6 sm:flex">
             <button onClick={() => scrollTo("how-it-works")} className="text-sm font-medium text-gray-600 transition-colors hover:text-indigo-600">
@@ -59,7 +59,7 @@ export default function MarketingPage({ navigate }: { navigate: (opts: { to: str
             </h1>
 
             <p className="mt-5 text-lg leading-relaxed text-gray-500 sm:text-xl">
-              WeekWise auto-sorts your spending, surfaces one weekly insight,
+              WeekWise Finance auto-sorts your spending, surfaces one weekly insight,
               and recommends one action. <strong className="text-gray-700">No dashboards. No busywork.</strong>
             </p>
 
@@ -89,7 +89,7 @@ export default function MarketingPage({ navigate }: { navigate: (opts: { to: str
               <div className="h-3 w-3 rounded-full bg-red-400" />
               <div className="h-3 w-3 rounded-full bg-yellow-400" />
               <div className="h-3 w-3 rounded-full bg-green-400" />
-              <span className="ml-3 text-xs text-gray-400">WeekWise — Dashboard</span>
+              <span className="ml-3 text-xs text-gray-400">WeekWise Finance — Dashboard</span>
             </div>
             <div className="p-6">
               <div className="mb-4 flex items-center justify-between">
@@ -377,7 +377,7 @@ export default function MarketingPage({ navigate }: { navigate: (opts: { to: str
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <div className="flex items-center gap-2">
               <span className="text-xl">💰</span>
-              <span className="text-sm font-bold text-indigo-600">WeekWise</span>
+              <span className="text-sm font-bold text-indigo-600">WeekWise Finance</span>
             </div>
             <nav className="flex flex-wrap justify-center gap-4 text-xs text-gray-400">
               <button onClick={() => scrollTo("how-it-works")} className="hover:text-indigo-600">How it works</button>
@@ -389,7 +389,7 @@ export default function MarketingPage({ navigate }: { navigate: (opts: { to: str
             </nav>
           </div>
           <div className="mt-6 border-t border-gray-100 pt-6 text-center text-xs text-gray-400">
-            <p>WeekWise — Your money, explained in one minute a week.</p>
+            <p>WeekWise Finance — Your money, explained in one minute a week.</p>
             <p className="mt-1">Built with ❤️ for busy professionals.</p>
           </div>
         </div>

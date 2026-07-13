@@ -2,7 +2,7 @@ import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "com.weekwise.app",
-  appName: "WeekWise",
+  appName: "WeekWise Finance",
   webDir: "dist/client",
   server: {
     url: "https://6519b91b66901f3f0d85d0e9e833a163.ctonew.app",
