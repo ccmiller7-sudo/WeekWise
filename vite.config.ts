@@ -29,8 +29,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["pwa-192x192.png", "pwa-512x512.png"],
       manifest: {
-        name: "WeekWise",
-        short_name: "WeekWise",
+        name: "WeekWise Finance",
+        short_name: "WeekWise Finance",
         description: "Your money, explained in one minute a week",
         theme_color: "#4f46e5",
         background_color: "#f9fafb",

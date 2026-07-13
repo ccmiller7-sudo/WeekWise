@@ -76,7 +76,7 @@ function AuthPage() {
   return (
     <div className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-6">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-indigo-600">WeekWise</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-indigo-600">WeekWise Finance</h1>
         <p className="mt-1 text-sm text-gray-500">Your money, explained in one minute</p>
       </div>
 

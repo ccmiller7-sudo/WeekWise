@@ -8,14 +8,14 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!post) {
       return {
         meta: [
-          { title: "Post Not Found — WeekWise Blog" },
+          { title: "Post Not Found — WeekWise Finance Blog" },
           { name: "description", content: "The blog post you're looking for doesn't exist." },
         ],
       };
     }
     return {
       meta: [
-        { title: `${post.title} — WeekWise Blog` },
+        { title: `${post.title} — WeekWise Finance Blog` },
         { name: "description", content: post.excerpt },
         { name: "og:title", content: post.title },
         { name: "og:description", content: post.excerpt },
@@ -86,7 +86,7 @@ function BlogPost() {
 
       <div className="mt-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 text-center">
         <p className="text-lg font-semibold text-gray-800">Ready to take control of your money?</p>
-        <p className="mt-1 text-sm text-gray-500">Get your spending sorted in one minute a week with WeekWise.</p>
+        <p className="mt-1 text-sm text-gray-500">Get your spending sorted in one minute a week with WeekWise Finance.</p>
         <Link to="/auth" className="btn-primary mt-4 inline-block">Start Free Trial</Link>
       </div>
     </div>

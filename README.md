@@ -1,8 +1,8 @@
-# WeekWise
+# WeekWise Finance
 
 Your money, explained in one minute a week.
 
-**WeekWise** auto-sorts your spending, surfaces one weekly AI insight, and recommends one actionable step. No dashboards, no busywork.
+**WeekWise Finance** auto-sorts your spending, surfaces one weekly AI insight, and recommends one actionable step. No dashboards, no busywork.
 
 ## Features
 

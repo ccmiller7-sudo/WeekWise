@@ -13,11 +13,11 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "WeekWise" },
+      { title: "WeekWise Finance" },
       { name: "theme-color", content: "#4f46e5" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "WeekWise" },
+      { name: "apple-mobile-web-app-title", content: "WeekWise Finance" },
       { name: "msapplication-TileColor", content: "#4f46e5" },
       { name: "msapplication-TileImage", content: "/pwa-192x192.png" },
     ],
