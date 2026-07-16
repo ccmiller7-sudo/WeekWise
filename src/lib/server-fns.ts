@@ -271,7 +271,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" }).handler(
             price_data: {
               currency: "usd",
               product_data: {
-                name: data.planType === "annual" ? "WeekWise Annual" : "WeekWise Monthly",
+                name: data.planType === "annual" ? "WeekWise Finance Annual" : "WeekWise Finance Monthly",
                 description: data.planType === "annual"
                   ? "Annual subscription — save ~$16 vs monthly"
                   : "Monthly subscription — 14-day free trial included",
@@ -369,7 +369,7 @@ export const createLinkToken = createServerFn({ method: "POST" }).handler(
       const client = new PlaidApi(config);
       const response = await client.linkTokenCreate({
         user: { client_user_id: data.userId },
-        client_name: "WeekWise",
+        client_name: "WeekWise Finance",
         products: ["transactions"],
         country_codes: ["US"],
         language: "en",
