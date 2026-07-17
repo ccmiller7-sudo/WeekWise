@@ -164,7 +164,8 @@ export const askCoach = createServerFn({ method: "POST" }).handler(
 
 export const signup = createServerFn({ method: "POST" }).handler(
   async (data: { email: string; password: string }) => {
-    const { createAuthUser, getAuthByEmail, createUser, createSubscription } = await import("~/lib/db");
+    const { createAuthUser, getAuthByEmail, createUser, createSubscription, initSchema } = await import("~/lib/db");
+    await initSchema();
     const { generateId } = await import("~/lib/utils");
     const crypto = await import("node:crypto");
 
@@ -203,7 +204,9 @@ export const signup = createServerFn({ method: "POST" }).handler(
 
 export const login = createServerFn({ method: "POST" }).handler(
   async (data: { email: string; password: string }) => {
-    const { getAuthByEmail } = await import("~/lib/db");
+    const { getAuthByEmail, initSchema, seedDemoData } = await import("~/lib/db");
+    await initSchema();
+    await seedDemoData();
     const crypto = await import("node:crypto");
 
     const auth = await getAuthByEmail(data.email);

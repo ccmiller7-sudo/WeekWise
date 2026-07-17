@@ -148,6 +148,16 @@ export async function seedDemoData(): Promise<void> {
        'Your dining spending is up 24% this week — $101.55 vs $82 last week.',
        'Try cooking at home 2 more nights this week to bring it back down.']);
   }
+
+  // Seed demo auth account (demo@weekwise.app / Demo123456)
+  const demoAuth = await query(`SELECT id FROM weekwise_auth WHERE email = $1`, ['demo@weekwise.app']);
+  if (demoAuth.length === 0) {
+    const crypto = await import("node:crypto");
+    const hash = crypto.createHash("sha256").update("Demo123456").digest("hex");
+    await query(`INSERT INTO weekwise_auth (id, email, password_hash, user_id)
+      VALUES ($1, $2, $3, $4)`,
+      ['demo-auth', 'demo@weekwise.app', hash, 'demo-user']);
+  }
 }
 
 // ── User helpers ───────────────────────────────────────────────────────────
