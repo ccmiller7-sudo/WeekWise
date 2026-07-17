@@ -28,3 +28,5 @@ android/captures/
 android/.gradle/
 android/local.properties
 *.keystore
+.vercel
+.env*

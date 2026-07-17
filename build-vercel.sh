@@ -9,7 +9,7 @@ mkdir -p .vercel/output/functions/render.func
 cp -R dist/client .vercel/output/static
 rm -f .vercel/output/static/index.html
 echo "[3/3] bundle SSR handler"
-npx esbuild vercel-entry.ts --bundle --platform=node --target=node22 --outfile=.vercel/output/functions/render.func/index.mjs --external:./dist/server/server.js --packages=external
+npx esbuild vercel-entry.ts --bundle --platform=node --target=node22 --format=esm --outfile=.vercel/output/functions/render.func/index.mjs --packages=external
 cat > .vercel/output/functions/render.func/.vc-config.json <<'JSON'
 { "runtime": "nodejs22.x", "handler": "index.mjs", "launcherType": "Nodejs", "supportsResponseStreaming": true }
 JSON
