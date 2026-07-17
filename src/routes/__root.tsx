@@ -64,6 +64,17 @@ function RootDocument({ children }: { children: ReactNode }) {
 
         <Scripts />
       </body>
+      {/* Footer — legal links and copyright */}
+      <footer className="border-t border-gray-100 bg-gray-50 px-4 py-6 text-center text-xs text-gray-400">
+        <div className="mx-auto max-w-3xl">
+          <div className="mb-2 flex items-center justify-center gap-4">
+            <a href="/privacy" className="hover:text-gray-600 transition-colors">Privacy Policy</a>
+            <span className="text-gray-300">·</span>
+            <a href="/terms" className="hover:text-gray-600 transition-colors">Terms of Service</a>
+          </div>
+          <p>© {new Date().getFullYear()} WeekWise Finance. All rights reserved.</p>
+        </div>
+      </footer>
     </html>
   );
 }
