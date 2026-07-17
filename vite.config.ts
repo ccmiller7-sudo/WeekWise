@@ -4,6 +4,7 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
+import { nitro } from "nitro/vite";
 
 export default defineConfig({
   server: {
@@ -24,6 +25,7 @@ export default defineConfig({
       // (it's an API-only route using createAPIFileRoute)
       routeFileIgnorePattern: "webhook\\.ts",
     }),
+    nitro({ preset: "vercel" }),
     viteReact(),
     VitePWA({
       registerType: "autoUpdate",

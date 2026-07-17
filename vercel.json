@@ -1,5 +1,5 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "sh build-vercel.sh",
-  "outputDirectory": ".vercel/output/static"
+  "buildCommand": "npm run build",
+  "outputDirectory": ".output/public"
 }
