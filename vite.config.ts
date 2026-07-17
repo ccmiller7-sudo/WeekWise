@@ -4,6 +4,7 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
+import { nitro } from "nitro/vite";
 
 export default defineConfig({
   server: {
@@ -23,6 +24,14 @@ export default defineConfig({
       // Exclude the webhook file from the page route tree
       // (it's an API-only route using createAPIFileRoute)
       routeFileIgnorePattern: "webhook\\.ts",
+    }),
+    // Nitro generates the Vercel serverless output; use CJS format to avoid
+    // "module is not defined in ES module scope" on Vercel's Node.js runtime.
+    nitro({
+      preset: "vercel",
+      output: {
+        format: "cjs",
+      },
     }),
     viteReact(),
     VitePWA({
