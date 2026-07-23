@@ -27,9 +27,6 @@ export default defineConfig({
     }),
     nitro({
       preset: "vercel",
-      vercel: {
-        entryFormat: "nodejs",
-      },
     }),
     viteReact(),
     VitePWA({
