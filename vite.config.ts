@@ -25,12 +25,10 @@ export default defineConfig({
       // (it's an API-only route using createAPIFileRoute)
       routeFileIgnorePattern: "webhook\\.ts",
     }),
-    // Nitro generates the Vercel serverless output; use CJS format to avoid
-    // "module is not defined in ES module scope" on Vercel's Node.js runtime.
     nitro({
       preset: "vercel",
-      output: {
-        format: "cjs",
+      vercel: {
+        entryFormat: "nodejs",
       },
     }),
     viteReact(),
