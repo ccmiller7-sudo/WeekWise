@@ -211,12 +211,8 @@ export const signup = createServerFn({ method: "POST" })
 
 export const login = createServerFn({ method: "POST" })
   .handler(async (input: any) => {
-    console.log("LOGIN_RAW_INPUT:", JSON.stringify(input));
-    console.log("LOGIN_KEYS:", Object.keys(input || {}));
     const body = input?.data || input;
     const { email, password } = body;
-    console.log("LOGIN_BODY:", JSON.stringify(body));
-    console.log("LOGIN_EMAIL:", email, "PASSWORD:", password ? "present" : "undefined");
     const { getAuthByEmail, initSchema, seedDemoData } = await import("~/lib/db");
     await initSchema();
     await seedDemoData();
