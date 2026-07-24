@@ -301,6 +301,13 @@ export async function createAuthUser(
     VALUES ($1, $2, $3, $4)`, [id, email, passwordHash, userId]);
 }
 
+export async function updateAuthPassword(
+  email: string,
+  passwordHash: string
+): Promise<void> {
+  await query(`UPDATE weekwise_auth SET password_hash = $1 WHERE email = $2`, [passwordHash, email]);
+}
+
 export async function getAuthByEmail(email: string): Promise<{
   id: string;
   email: string;
