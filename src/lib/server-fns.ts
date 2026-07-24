@@ -3,6 +3,20 @@ import { generateId } from "~/lib/utils";
 
 // ── Health Check ──────────────────────────────────────────────────────────
 
+export const getDbState = createServerFn({ method: "GET" }).handler(async () => {
+  const { initSchema, getAuthByEmail } = await import("~/lib/db");
+  await initSchema();
+  const crypto = await import("node:crypto");
+  const auth = await getAuthByEmail("demo@weekwise.app");
+  const hash = crypto.createHash("sha256").update("Demo123456").digest("hex");
+  return {
+    demoAuthExists: !!auth,
+    demoAuthHash: auth?.password_hash || "none",
+    expectedHash: hash,
+    hashMatches: auth?.password_hash === hash,
+  };
+});
+
 export const getHealth = createServerFn({ method: "GET" }).handler(async () => {
   const { getCategories, initSchema } = await import("~/lib/db");
   let dbStatus = "disconnected";
