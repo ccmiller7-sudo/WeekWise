@@ -20,6 +20,9 @@ async function query(sql: string, params?: any[]): Promise<any[]> {
   try {
     const result = await client.query(sql, params);
     return result.rows;
+  } catch (e: any) {
+    console.error("DB_QUERY_ERROR:", e.message, "SQL:", sql.substring(0, 100));
+    throw e;
   } finally {
     client.release();
   }

@@ -227,28 +227,32 @@ export const login = createServerFn({ method: "POST" })
   .handler(async (input: any) => {
     const body = input?.data || input;
     const { email, password } = body;
-    const { getAuthByEmail, initSchema, seedDemoData, createAuthUser } = await import("~/lib/db");
+    const { getAuthByEmail, createAuthUser, createUser } = await import("~/lib/db");
+    const { initSchema } = await import("~/lib/db");
     await initSchema();
-    await seedDemoData();
     const crypto = await import("node:crypto");
 
     let auth = await getAuthByEmail(email);
 
-    // If demo account not found, create it on the fly
+    // If demo@weekwise.app missing anywhere in the DB, create everything inline
     if (!auth && email === "demo@weekwise.app") {
-      const demoHash = crypto.createHash("sha256").update("Demo123456").digest("hex");
-      await createAuthUser("demo-auth-fallback", email, demoHash, "demo-user");
-      auth = await getAuthByEmail(email);
+      try {
+        const demoHash = crypto.createHash("sha256").update("Demo123456").digest("hex");
+        await createUser("demo-user", "Stop overspending", "Too many subscriptions", "manual");
+        await createAuthUser("demo-auth", email, demoHash, "demo-user");
+        auth = await getAuthByEmail(email);
+      } catch (e: any) {
+        return { success: false, error: `Demo create failed: ${e.message}` };
+      }
     }
 
     if (!auth) {
-      const demoCheck = email === "demo@weekwise.app" ? await getAuthByEmail("demo@weekwise.app") : null;
-      return { success: false, error: `No auth found. Demo exists: ${!!demoCheck}. Hash: ${demoCheck?.password_hash?.substring(0,10) || "none"}` };
+      return { success: false, error: `No auth found. Demo exists: false` };
     }
 
     const hash = crypto.createHash("sha256").update(password).digest("hex");
     if (hash !== auth.password_hash) {
-      return { success: false, error: `Hash mismatch. DB: ${auth.password_hash?.substring(0,10) || "none"} Input: ${hash.substring(0,10)}` };
+      return { success: false, error: `Hash mismatch. DB: ${auth.password_hash?.substring(0,10)} Input: ${hash.substring(0,10)}` };
     }
 
     return { success: true, userId: auth.user_id, email: auth.email };
