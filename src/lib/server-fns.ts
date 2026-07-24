@@ -27,9 +27,9 @@ export const getHealth = createServerFn({ method: "GET" }).handler(async () => {
 // ── Onboarding ────────────────────────────────────────────────────────────
 
 export const submitOnboarding = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { goal: string; painPoint: string; syncMethod: string })
-  .handler(async ({ data }) => {
-    const { goal, painPoint, syncMethod } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { goal, painPoint, syncMethod } = body;
     const { createUser } = await import("~/lib/db");
     const userId = generateId();
     await createUser(userId, goal, painPoint, syncMethod);
@@ -42,8 +42,8 @@ export const submitOnboarding = createServerFn({ method: "POST" })
 export const fetchTransactions = createServerFn({ method: "GET" }).handler(
   async (data: { userId?: string; category?: string; limit?: number }) => {
     const { getTransactions, getCategories } = await import("~/lib/db");
-    const txns = await getTransactions(data.userId || "demo-user", {
-      category: data.category,
+    const txns = await getTransactions(body.userId || "demo-user", {
+      category: body.category,
       limit: data.limit,
     });
     const cats = await getCategories();
@@ -52,9 +52,9 @@ export const fetchTransactions = createServerFn({ method: "GET" }).handler(
 );
 
 export const updateTransactionCategory = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { id: string; category: string })
-  .handler(async ({ data }) => {
-    const { id, category } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { id, category } = body;
     const { updateTransactionCategory: updateCat } = await import("~/lib/db");
     const result = await updateCat(id, category);
     return { success: result };
@@ -62,9 +62,9 @@ export const updateTransactionCategory = createServerFn({ method: "POST" })
 );
 
 export const importCSVTransactions = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string; transactions: Array<{ description: string; amount: number; date?: string }> })
-  .handler(async ({ data }) => {
-    const { userId, transactions: rawTxns } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId, transactions: rawTxns } = body;
     const { bulkCreateTransactions } = await import("~/lib/db");
     const { categorizeTransactionsBulk } = await import("~/lib/llm");
     const { generateId } = await import("~/lib/utils");
@@ -89,16 +89,9 @@ export const importCSVTransactions = createServerFn({ method: "POST" })
 );
 
 export const addTransaction = createServerFn({ method: "POST" })
-  .validator((d: any) => d as {
-    userId: string;
-    description: string;
-    amount: number;
-    category?: string;
-    isRecurring?: boolean;
-    isSubscription?: boolean;
-  })
-  .handler(async ({ data }) => {
-    const { userId, description, amount, category: catParam, isRecurring, isSubscription } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId, description, amount, category: catParam, isRecurring, isSubscription } = body;
     const { createTransaction } = await import("~/lib/db");
     const { categorizeTransaction } = await import("~/lib/llm");
     const id = generateId();
@@ -130,15 +123,15 @@ export const addTransaction = createServerFn({ method: "POST" })
 export const fetchInsights = createServerFn({ method: "GET" }).handler(
   async (data: { userId?: string }) => {
     const { getInsights } = await import("~/lib/db");
-    const insights = await getInsights(data.userId || "demo-user");
+    const insights = await getInsights(body.userId || "demo-user");
     return { insights };
   }
 );
 
 export const generateInsight = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId?: string })
-  .handler(async ({ data }) => {
-    const { userId: uid } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId: uid } = body;
     const { getTransactions, createInsight } = await import("~/lib/db");
     const { generateInsight: llmInsight } = await import("~/lib/llm");
 
@@ -159,9 +152,9 @@ export const generateInsight = createServerFn({ method: "POST" })
 // ── Coach ─────────────────────────────────────────────────────────────────
 
 export const askCoach = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { question: string; userId?: string })
-  .handler(async ({ data }) => {
-    const { question, userId: uid } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { question, userId: uid } = body;
     const { getTransactions } = await import("~/lib/db");
     const { coachAnswer } = await import("~/lib/llm");
 
@@ -175,9 +168,9 @@ export const askCoach = createServerFn({ method: "POST" })
 // ── Auth ────────────────────────────────────────────────────────────────────
 
 export const signup = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { email: string; password: string })
-  .handler(async ({ data }) => {
-    const { email, password } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { email, password } = body;
     const { createAuthUser, getAuthByEmail, createUser, createSubscription, initSchema } = await import("~/lib/db");
     await initSchema();
     const { generateId } = await import("~/lib/utils");
@@ -217,9 +210,9 @@ export const signup = createServerFn({ method: "POST" })
 );
 
 export const login = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { email: string; password: string })
-  .handler(async ({ data }) => {
-    const { email, password } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { email, password } = body;
     const { getAuthByEmail, initSchema, seedDemoData } = await import("~/lib/db");
     await initSchema();
     await seedDemoData();
@@ -244,7 +237,7 @@ export const login = createServerFn({ method: "POST" })
 export const getSubscriptionStatus = createServerFn({ method: "GET" }).handler(
   async (data: { userId?: string }) => {
     const { getActiveSubscription } = await import("~/lib/db");
-    const userId = data.userId || "demo-user";
+    const userId = body.userId || "demo-user";
     const sub = await getActiveSubscription(userId);
     if (!sub) {
       const { createSubscription } = await import("~/lib/db");
@@ -264,9 +257,9 @@ export const getSubscriptionStatus = createServerFn({ method: "GET" }).handler(
 );
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string; planType: string })
-  .handler(async ({ data }) => {
-    const { userId, planType } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId, planType } = body;
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeSecretKey) {
       return { error: "STRIPE_SECRET_KEY not configured." };
@@ -322,9 +315,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 );
 
 export const createPortalSession = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string })
-  .handler(async ({ data }) => {
-    const { userId } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId } = body;
     const { getSubscription } = await import("~/lib/db");
     const sub = await getSubscription(userId);
     if (!sub || !sub.stripe_customer_id) {
@@ -354,9 +347,9 @@ export const createPortalSession = createServerFn({ method: "POST" })
 // Manual subscription activation — user clicks this after paying on Stripe
 // (fallback since static payment links can't carry client_reference_id for webhook matching)
 export const activateSubscription = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string })
-  .handler(async ({ data }) => {
-    const { userId } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId } = body;
     const { getSubscription, updateSubscriptionStatus } = await import("~/lib/db");
     const sub = await getSubscription(userId);
     if (!sub) {
@@ -374,9 +367,9 @@ export const activateSubscription = createServerFn({ method: "POST" })
 // ── Plaid Integration ───────────────────────────────────────────────────────
 
 export const createLinkToken = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string })
-  .handler(async ({ data }) => {
-    const { userId } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId } = body;
     const plaidClientId = process.env.PLAID_CLIENT_ID;
     const plaidSecret = process.env.PLAID_SECRET;
     const plaidEnv = process.env.PLAID_ENV || "sandbox";
@@ -410,9 +403,9 @@ export const createLinkToken = createServerFn({ method: "POST" })
 );
 
 export const exchangePublicToken = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string; publicToken: string })
-  .handler(async ({ data }) => {
-    const { userId, publicToken } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId, publicToken } = body;
     const plaidClientId = process.env.PLAID_CLIENT_ID;
     const plaidSecret = process.env.PLAID_SECRET;
     const plaidEnv = process.env.PLAID_ENV || "sandbox";
@@ -461,9 +454,9 @@ export const exchangePublicToken = createServerFn({ method: "POST" })
 );
 
 export const syncPlaidTransactions = createServerFn({ method: "POST" })
-  .validator((d: any) => d as { userId: string; plaidItemId: string })
-  .handler(async ({ data }) => {
-    const { userId, plaidItemId } = data;
+  .handler(async (input: any) => {
+    const body = input?.data || input;
+    const { userId, plaidItemId } = body;
     const plaidClientId = process.env.PLAID_CLIENT_ID;
     const plaidSecret = process.env.PLAID_SECRET;
     const plaidEnv = process.env.PLAID_ENV || "sandbox";
@@ -552,7 +545,7 @@ export const syncPlaidTransactions = createServerFn({ method: "POST" })
         await bulkCreateTransactions(enriched);
       }
 
-      await updatePlaidSyncTime(data.plaidItemId);
+      await updatePlaidSyncTime(body.plaidItemId);
 
       return { success: true, synced: newTxns.length };
     } catch (err) {
@@ -565,7 +558,7 @@ export const syncPlaidTransactions = createServerFn({ method: "POST" })
 export const getLinkedAccounts = createServerFn({ method: "GET" }).handler(
   async (data: { userId: string }) => {
     const { getPlaidItems } = await import("~/lib/db");
-    const items = await getPlaidItems(data.userId);
+    const items = await getPlaidItems(body.userId);
     return { items };
   }
 );
