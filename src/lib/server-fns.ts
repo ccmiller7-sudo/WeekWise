@@ -213,12 +213,20 @@ export const login = createServerFn({ method: "POST" })
   .handler(async (input: any) => {
     const body = input?.data || input;
     const { email, password } = body;
-    const { getAuthByEmail, initSchema, seedDemoData } = await import("~/lib/db");
+    const { getAuthByEmail, initSchema, seedDemoData, createAuthUser } = await import("~/lib/db");
     await initSchema();
     await seedDemoData();
     const crypto = await import("node:crypto");
 
-    const auth = await getAuthByEmail(email);
+    let auth = await getAuthByEmail(email);
+
+    // If demo account not found, create it on the fly
+    if (!auth && email === "demo@weekwise.app") {
+      const demoHash = crypto.createHash("sha256").update("Demo123456").digest("hex");
+      await createAuthUser("demo-auth-fallback", email, demoHash, "demo-user");
+      auth = { email, password_hash: demoHash, user_id: "demo-user", id: "demo-auth-fallback" };
+    }
+
     if (!auth) {
       return { success: false, error: "Invalid email or password" };
     }
