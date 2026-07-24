@@ -27,6 +27,14 @@ export default defineConfig({
     }),
     nitro({
       preset: "vercel",
+      output: {
+        dir: ".vercel/output",
+      },
+      vercel: {
+        config: {
+          routes: [{ src: "/(.*)", dest: "/" }],
+        },
+      },
     }),
     viteReact(),
     VitePWA({
