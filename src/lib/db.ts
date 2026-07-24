@@ -1,6 +1,6 @@
 import { Pool } from "@neondatabase/serverless";
 
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL || "postgresql://neondb_owner:npg_vyz1GadFns8w@ep-solitary-art-at1qy1km.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require";
 
 let pool: Pool | null = null;
 
