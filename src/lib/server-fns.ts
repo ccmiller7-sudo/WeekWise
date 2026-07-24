@@ -227,14 +227,21 @@ export const login = createServerFn({ method: "POST" })
   .handler(async (input: any) => {
     const body = input?.data || input;
     const { email, password } = body;
-    const { getAuthByEmail, createAuthUser, createUser } = await import("~/lib/db");
-    const { initSchema } = await import("~/lib/db");
-    await initSchema();
     const crypto = await import("node:crypto");
+
+    // Init database
+    try {
+      const { initSchema } = await import("~/lib/db");
+      await initSchema();
+    } catch (e: any) {
+      return { success: false, error: `DB init failed: ${e.message}` };
+    }
+
+    // Import remaining DB functions
+    const { getAuthByEmail, createAuthUser, createUser } = await import("~/lib/db");
 
     let auth = await getAuthByEmail(email);
 
-    // If demo@weekwise.app missing anywhere in the DB, create everything inline
     if (!auth && email === "demo@weekwise.app") {
       try {
         const demoHash = crypto.createHash("sha256").update("Demo123456").digest("hex");
