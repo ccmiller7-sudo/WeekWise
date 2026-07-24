@@ -1,24 +1,16 @@
-import { Pool } from "@neondatabase/serverless";
+import { Client } from "@neondatabase/serverless";
 
 const DATABASE_URL = process.env.DATABASE_URL || "postgresql://neondb_owner:npg_vyz1GadFns8w@ep-solitary-art-at1qy1km.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require";
 
-let pool: Pool | null = null;
-
-function getPool(): Pool {
-  if (!DATABASE_URL) {
-    throw new Error("DATABASE_URL environment variable is not set");
-  }
-  if (!pool) {
-    pool = new Pool({ connectionString: DATABASE_URL });
-  }
-  return pool;
-}
-
-// Execute a parameterized SQL query and return rows
 async function query(sql: string, params?: any[]): Promise<any[]> {
-  const p = getPool();
-  const result = await p.query(sql, params || []);
-  return result.rows;
+  const client = new Client(DATABASE_URL);
+  await client.connect();
+  try {
+    const result = await client.query(sql, params || []);
+    return result.rows;
+  } finally {
+    await client.end();
+  }
 }
 
 // ── Schema Init ───────────────────────────────────────────────────────────
