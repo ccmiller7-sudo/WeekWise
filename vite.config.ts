@@ -30,11 +30,6 @@ export default defineConfig({
       output: {
         dir: ".vercel/output",
       },
-      vercel: {
-        config: {
-          routes: [{ src: "/(.*)", dest: "/" }],
-        },
-      },
     }),
     viteReact(),
     VitePWA({
