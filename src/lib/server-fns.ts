@@ -238,25 +238,17 @@ export const login = createServerFn({ method: "POST" })
     if (!auth && email === "demo@weekwise.app") {
       const demoHash = crypto.createHash("sha256").update("Demo123456").digest("hex");
       await createAuthUser("demo-auth-fallback", email, demoHash, "demo-user");
-      auth = { email, password_hash: demoHash, user_id: "demo-user", id: "demo-auth-fallback" };
+      auth = await getAuthByEmail(email);
     }
 
     if (!auth) {
-      return { success: false, error: "Invalid email or password" };
+      const demoCheck = email === "demo@weekwise.app" ? await getAuthByEmail("demo@weekwise.app") : null;
+      return { success: false, error: `No auth found. Demo exists: ${!!demoCheck}. Hash: ${demoCheck?.password_hash?.substring(0,10) || "none"}` };
     }
 
     const hash = crypto.createHash("sha256").update(password).digest("hex");
     if (hash !== auth.password_hash) {
-      // If demo account has wrong hash, fix it inline
-      if (email === "demo@weekwise.app") {
-        const { updateAuthPassword } = await import("~/lib/db");
-        const demoHash = crypto.createHash("sha256").update("Demo123456").digest("hex");
-        await updateAuthPassword(email, demoHash);
-        if (hash === demoHash) {
-          return { success: true, userId: auth.user_id, email: auth.email };
-        }
-      }
-      return { success: false, error: "Invalid email or password" };
+      return { success: false, error: `Hash mismatch. DB: ${auth.password_hash?.substring(0,10) || "none"} Input: ${hash.substring(0,10)}` };
     }
 
     return { success: true, userId: auth.user_id, email: auth.email };
